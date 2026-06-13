@@ -1,21 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDI Dashboard</title>
+
+<style>
+body{
+font-family:Arial,sans-serif;
+background:#07152d;
+color:white;
+padding:15px;
+}
+
+h1{
+text-align:center;
+}
+
+.card{
+background:#162544;
+padding:20px;
+border-radius:15px;
+text-align:center;
+margin-bottom:20px;
+}
+
+#total{
+font-size:40px;
+font-weight:bold;
+}
+
+input{
+width:100%;
+padding:12px;
+border:none;
+border-radius:10px;
+margin-bottom:20px;
+font-size:16px;
+}
+
+table{
+width:100%;
+background:white;
+color:black;
+border-collapse:collapse;
+}
+
+th,td{
+padding:8px;
+border:1px solid #ddd;
+font-size:14px;
+}
+
+th{
+background:#f2f2f2;
+}
+</style>
+</head>
+
+<body>
+
+<h1>Case Dashboard</h1>
+
+<div class="card">
+<h2>Total Cases</h2>
+<div id="total">0</div>
+</div>
+
+<input type="text" id="search" placeholder="Search Victim Name">
+
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Victim Name</th>
+<th>Region</th>
+<th>Report Type</th>
+<th>Location</th>
+</tr>
+</thead>
+
+<tbody id="tbody"></tbody>
+</table>
+
 <script>
-const sheetId = "1Ya_Db4CPACnCBWqnRoCTJ7YnhvolIOWKWjYTVodJXhs";
-const sheetName = "Form Responses 1";
+
+const sheetId="1Ya_Db4CPACnCBWqnRoCTJ7YnhvolIOWKWjYTVodJXhs";
+const sheetName="Form Responses 1";
 
 fetch(`https://opensheet.elk.sh/${sheetId}/${sheetName}`)
-.then(res => res.json())
-.then(data => {
+.then(res=>res.json())
+.then(data=>{
 
-document.getElementById("total").innerText =
-Array.isArray(data) ? data.length : 0;
+document.getElementById("total").innerText=
+Array.isArray(data)?data.length:0;
 
 function show(rows){
 
-let html = "";
+let html="";
 
-rows.forEach(r => {
+rows.forEach(r=>{
 
-html += `
+html+=`
 <tr>
 <td>${r.Date || ""}</td>
 <td>${r["Victim name"] || ""}</td>
@@ -27,18 +113,19 @@ html += `
 
 });
 
-document.getElementById("tbody").innerHTML = html;
+document.getElementById("tbody").innerHTML=html;
+
 }
 
 show(data);
 
 document.getElementById("search")
-.addEventListener("keyup", function(){
+.addEventListener("keyup",function(){
 
-let value = this.value.toLowerCase();
+let value=this.value.toLowerCase();
 
 show(
-data.filter(x =>
+data.filter(x=>
 (x["Victim name"] || "")
 .toLowerCase()
 .includes(value)
@@ -48,4 +135,8 @@ data.filter(x =>
 });
 
 });
+
 </script>
+
+</body>
+</html>
