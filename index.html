@@ -1,103 +1,43 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PDI Dashboard</title>
-
-<style>
-body{
-font-family:Arial;
-background:#0f172a;
-color:white;
-padding:20px;
-}
-
-h1{
-text-align:center;
-}
-
-#search{
-width:100%;
-padding:12px;
-border-radius:10px;
-border:none;
-margin-bottom:20px;
-}
-
-table{
-width:100%;
-background:white;
-color:black;
-border-collapse:collapse;
-}
-
-th,td{
-padding:8px;
-border:1px solid #ddd;
-}
-
-.card{
-background:#1e293b;
-padding:15px;
-border-radius:12px;
-margin-bottom:15px;
-text-align:center;
-}
-</style>
-</head>
-
-<body>
-
-<h1>Case Dashboard</h1>
-
-<div class="card">
-<h2>Total Cases</h2>
-<h1 id="total">0</h1>
-</div>
-
-<input type="text" id="search" placeholder="Search Victim Name">
-
-<table id="table">
-<thead>
-<tr>
-<th>Date</th>
-<th>Victim Name</th>
-</tr>
-</thead>
-<tbody></tbody>
-</table>
-
 <script>
+const sheetId = "1Ya_Db4CPACnCBWqnRoCTJ7YnhvolIOWKWjYTVodJXhs";
+const sheetName = "Form Responses 1";
 
-const data = [
-{date:"6/12/2026",name:"Hais"},
-{date:"6/12/2026",name:"Hd"}
-];
+fetch(`https://opensheet.elk.sh/${sheetId}/${sheetName}`)
+.then(res => res.json())
+.then(data => {
 
-document.getElementById("total").innerText=data.length;
+document.getElementById("total").innerText = data.length;
 
-let tbody=document.querySelector("tbody");
+let tbody = document.querySelector("tbody");
 
 function show(rows){
 tbody.innerHTML="";
+
 rows.forEach(r=>{
-tbody.innerHTML+=`
+tbody.innerHTML += `
 <tr>
-<td>${r.date}</td>
-<td>${r.name}</td>
+<td>${r.Date || ""}</td>
+<td>${r["Victim name"] || ""}</td>
 </tr>`;
 });
 }
 
 show(data);
 
-document.getElementById("search").addEventListener("keyup",function(){
-let value=this.value.toLowerCase();
-show(data.filter(x=>x.name.toLowerCase().includes(value)));
+document.getElementById("search")
+.addEventListener("keyup", function(){
+
+let value = this.value.toLowerCase();
+
+show(
+data.filter(x =>
+(x["Victim name"] || "")
+.toLowerCase()
+.includes(value)
+)
+);
+
 });
 
+});
 </script>
-
-</body>
-</html>
