@@ -7,53 +7,60 @@
 
 <style>
 body{
-font-family:Arial,sans-serif;
-background:#07152d;
-color:white;
-padding:15px;
+    font-family:Arial,sans-serif;
+    background:#07152d;
+    color:white;
+    padding:15px;
 }
 
 h1{
-text-align:center;
+    text-align:center;
 }
 
 .card{
-background:#162544;
-padding:20px;
-border-radius:15px;
-text-align:center;
-margin-bottom:20px;
+    background:#162544;
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    margin-bottom:20px;
 }
 
 #total{
-font-size:40px;
-font-weight:bold;
+    font-size:40px;
+    font-weight:bold;
 }
 
 input{
-width:100%;
-padding:12px;
-border:none;
-border-radius:10px;
-margin-bottom:20px;
-font-size:16px;
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    margin-bottom:20px;
+    font-size:16px;
+    box-sizing:border-box;
 }
 
 table{
-width:100%;
-background:white;
-color:black;
-border-collapse:collapse;
+    width:100%;
+    background:white;
+    color:black;
+    border-collapse:collapse;
+    font-size:12px;
 }
 
 th,td{
-padding:8px;
-border:1px solid #ddd;
-font-size:14px;
+    padding:8px;
+    border:1px solid #ddd;
+    text-align:left;
 }
 
 th{
-background:#f2f2f2;
+    background:#f2f2f2;
+}
+
+img{
+    max-width:60px;
+    border-radius:5px;
 }
 </style>
 </head>
@@ -63,8 +70,8 @@ background:#f2f2f2;
 <h1>Case Dashboard</h1>
 
 <div class="card">
-<h2>Total Cases</h2>
-<div id="total">0</div>
+    <h2>Total Cases</h2>
+    <div id="total">0</div>
 </div>
 
 <input type="text" id="search" placeholder="Search Victim Name">
@@ -72,11 +79,13 @@ background:#f2f2f2;
 <table>
 <thead>
 <tr>
-<th>Date</th>
-<th>Victim Name</th>
-<th>Region</th>
-<th>Report Type</th>
-<th>Location</th>
+    <th>Date</th>
+    <th>Victim Name</th>
+    <th>Gender</th>
+    <th>Region</th>
+    <th>Report Type</th>
+    <th>Location</th>
+    <th>Case Description</th>
 </tr>
 </thead>
 
@@ -85,47 +94,49 @@ background:#f2f2f2;
 
 <script>
 
-const sheetId="1Ya_Db4CPACnCBWqnRoCTJ7YnhvolIOWKWjYTVodJXhs";
-const sheetName="Form Responses 1";
+const sheetId = "1Ya_Db4CPACnCBWqnRoCTJ7YnhvolIOWKWjyTVodJXhs";
+const sheetName = "Form Responses 1";
 
 fetch(`https://opensheet.elk.sh/${sheetId}/${sheetName}`)
-.then(res=>res.json())
-.then(data=>{
+.then(res => res.json())
+.then(data => {
 
-document.getElementById("total").innerText=
-Array.isArray(data)?data.length:0;
+document.getElementById("total").innerText =
+Array.isArray(data) ? data.length : 0;
 
 function show(rows){
 
-let html="";
+let html = "";
 
-rows.forEach(r=>{
+rows.forEach(r => {
 
-html+=`
+html += `
 <tr>
 <td>${r.Date || ""}</td>
 <td>${r["Victim name"] || ""}</td>
+<td>${r.Gender || ""}</td>
 <td>${r.Region || ""}</td>
 <td>${r["Report type"] || ""}</td>
 <td>${r.Location || ""}</td>
+<td>${r["Case description"] || ""}</td>
 </tr>
 `;
 
 });
 
-document.getElementById("tbody").innerHTML=html;
+document.getElementById("tbody").innerHTML = html;
 
 }
 
 show(data);
 
 document.getElementById("search")
-.addEventListener("keyup",function(){
+.addEventListener("keyup", function(){
 
-let value=this.value.toLowerCase();
+let value = this.value.toLowerCase();
 
 show(
-data.filter(x=>
+data.filter(x =>
 (x["Victim name"] || "")
 .toLowerCase()
 .includes(value)
@@ -134,6 +145,9 @@ data.filter(x=>
 
 });
 
+})
+.catch(err => {
+console.log(err);
 });
 
 </script>
